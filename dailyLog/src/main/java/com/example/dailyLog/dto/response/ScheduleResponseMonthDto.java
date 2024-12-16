@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ScheduleResponseMonthDto {
 
-
+    private Long idx; // 스케줄 ID 추가
     private String title;
 
     private LocalDateTime start;

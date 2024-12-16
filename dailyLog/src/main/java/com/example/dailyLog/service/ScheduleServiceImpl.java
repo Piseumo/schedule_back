@@ -15,12 +15,9 @@ import com.example.dailyLog.exception.commonException.error.InvalidMonth;
 import com.example.dailyLog.exception.commonException.error.InvalidYear;
 import com.example.dailyLog.exception.scheduleException.ScheduleErrorCode;
 import com.example.dailyLog.exception.scheduleException.ScheduleNotFoundException;
-import com.example.dailyLog.exception.userException.UserErrorCode;
-import com.example.dailyLog.exception.userException.UserNotFoundException;
 import com.example.dailyLog.repository.CalendarRepository;
 import com.example.dailyLog.repository.ScheduleImageRepository;
 import com.example.dailyLog.repository.ScheduleRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.scheduling.annotation.Async;
@@ -71,6 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             return schedules.stream()
                     .map(schedule -> ScheduleResponseMonthDto.builder()
+                            .idx(schedule.getIdx())
                             .title(schedule.getTitle())
                             .start(schedule.getStart())
                             .end(schedule.getEnd())
@@ -411,4 +409,22 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ServiceException("Failed to delete schedule in ScheduleService.deleteSchedule", e);
         }
     }
+
+    @Transactional
+    @Override
+    public void updateScheduleDate(Long scheduleIdx, ScheduleRequestUpdateDto scheduleRequestUpdateDto) {
+        // 일정 조회
+        Schedule schedule = scheduleRepository.findById(scheduleIdx)
+                .orElseThrow(() -> new ScheduleNotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+
+        try {
+            // 시작 날짜 및 종료 날짜 업데이트
+            schedule.setStart(scheduleRequestUpdateDto.getStart());
+            schedule.setEnd(scheduleRequestUpdateDto.getEnd());
+            scheduleRepository.save(schedule); // 변경 사항 저장
+        } catch (Exception e) {
+            throw new ServiceException("Failed to update schedule date in ScheduleService.updateScheduleDate", e);
+        }
+    }
+
 }

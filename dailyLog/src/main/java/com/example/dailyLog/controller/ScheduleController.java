@@ -107,4 +107,15 @@ public class ScheduleController {
         scheduleService.deleteSchedule(idx, deleteAllRepeats, deleteOnlyThis, deleteAfter);
         return ResponseEntity.status(HttpStatus.OK).body("Schedule deleted successfully");
     }
+
+    //드래그 앤 드랍 관련
+    @PutMapping("/{idx}")
+    public ResponseEntity<String> updateScheduleDate(
+            @PathVariable(name = "idx") Long scheduleIdx,
+            @RequestBody ScheduleRequestUpdateDto scheduleRequestUpdateDto) {
+
+        scheduleService.updateScheduleDate(scheduleIdx, scheduleRequestUpdateDto);
+        return ResponseEntity.ok("Schedule date updated successfully");
+    }
+
 }

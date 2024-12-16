@@ -6,6 +6,7 @@ import com.example.dailyLog.dto.response.ScheduleResponseDayDto;
 import com.example.dailyLog.dto.response.ScheduleResponseMonthDto;
 import com.example.dailyLog.dto.response.ScheduleResponseYearDto;
 import com.example.dailyLog.entity.Calendars;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ScheduleService {
     void saveSchedule(ScheduleRequestInsertDto scheduleRequestInsertDto, List<MultipartFile> imageFileList);
     void updateSchedule(ScheduleRequestUpdateDto scheduleRequestUpdateDto,List<MultipartFile> imageFileList);
     void deleteSchedule(Long scheduleId, boolean deleteAllRepeats, boolean deleteOnlyThis, boolean deleteAfter);
+
+    void updateScheduleDate(Long scheduleIdx, ScheduleRequestUpdateDto scheduleRequestUpdateDto);
 }
